@@ -1,5 +1,10 @@
 # Compiled class file
 *.class
+package-lock.json
+
+#directories
+.metadata
+
 
 # Log file
 *.log

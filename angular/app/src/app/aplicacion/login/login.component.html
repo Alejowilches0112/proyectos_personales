@@ -1,0 +1,67 @@
+<mat-grid-list cols="3" rowHeight="100%">
+    <mat-grid-tile>
+        <mat-card class="card-login">
+            <mat-card-header>
+                <mat-card-title>
+                    <h3>Bienvenido</h3>
+                    <div mat-card-avatar class="header-image-login"></div>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div *ngIf="perfil == ''">
+                    <span (click)="changePerfil('estudiante')">
+                        <img id="login-figure-1" src="../../../assets/images/student-icon.png">
+                        <span class="title-icon-1">Ingreso</span>
+                        <span class="title-icon-1_2">Estudiantes</span>
+                    </span>
+                    <span (click)="changePerfil('docente')">
+                        <img id="login-figure-2" src="../../../assets/images/teaching-vector.png">
+                        <span class="title-icon-2">Ingreso</span>
+                        <span class="title-icon-2_2">Docentes</span>
+                    </span>
+                </div>
+                <div *ngIf="perfil != ''">
+                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)" autocomplete="off" class="loginForm">
+                        <h4>BIEVENIDO {{perfil | uppercase}}</h4>
+                        <div class="row">
+                            <div class="col-sm-12 col-xs-12">
+                                <mat-form-field>
+                                    <i class="material-icons" matSuffix >perm_identity</i>
+                                    <input matInput type="text" formControlName="username" />
+                                </mat-form-field>
+                                <mat-error *ngIf="loginForm.controls.username.invalid && loginForm.controls.username.touched">{{loginForm}}</mat-error>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-xs-12">
+                                <mat-form-field>
+                                    <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" >
+                                    <span mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                    </span>
+                                </mat-form-field>
+                                <mat-error *ngIf="loginForm.controls.password.invalid && loginForm.controls.password.touched">{{loginForm}}</mat-error>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-xs-12">
+                                <button class="login-button" [disabled]="!loginForm.valid" (click)="onSubmit(loginForm.valid);"  mat-raised-button style="background-color:#0f385a">
+                                    <i class="material-icons" matSuffix  style="padding: 0px 0px;">input</i>
+                                    Ingresar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="example-button-row">
+                            <button (click)="changePerfil('')" mat-icon-button style="background-color: white;">
+                                <i class="material-icons" style="color:grey; padding: 0px 0px; font-size: 60px;">arrow_left</i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+        <img style="width: 100%; height: 100%;" src="../../../assets/images/campus-poli.jpg">
+    </mat-grid-tile>
+</mat-grid-list>

@@ -1,0 +1,36 @@
+.icon-menu {
+  padding: 0 14px;
+}
+
+.spacer-menu {
+  flex: 1 1 auto;
+}
+
+.mat-tolbar {
+  background-color: #0f385a;
+  color: white;
+  width: 100% !important;
+}
+
+.mat-toolbar-multiple-rows {
+  background-color: #0f385a;
+  color: white;
+  width: 100% !important;
+}
+
+.title-menu {
+  margin: 15px;
+}
+.mat-menu-content:not(:empty) {
+  padding-top: 0px !important;
+  padding-bottom: 8px;
+}
+
+[type="button"]:not(:disabled),
+[type="reset"]:not(:disabled),
+[type="submit"]:not(:disabled),
+button:not(:disabled) {
+  background-color: #0f385a;
+  color: white;
+  border: aliceblue;
+}

@@ -1,0 +1,161 @@
+.card-login {
+  width: 400px !important;
+  height: 500px;
+  //border: 1px solid #555;
+  //top: 20%;
+}
+.header-image-login {
+  background-image: url("../../../assets/logo-poli.png");
+  background-size: cover;
+  min-width: 50%;
+  margin-top: 10%;
+  margin-left: 100px;
+}
+.mat-card-avatar {
+  height: 70px !important;
+  width: 150px;
+  border-radius: 0;
+}
+.mat-card-header {
+  margin-top: 8% !important;
+}
+
+h3 {
+  text-decoration: underline;
+  color: gray;
+  margin-left: 120px;
+  //opacity: 0.2%;
+}
+h4{
+    margin: 5px 40px;
+}
+
+#login-figure-1 {
+  cursor: pointer;
+  position: absolute;
+  top: 250px;
+  left: 60px;
+  right: 0;
+  bottom: 0;
+  //padding: 30px;
+  margin: inherit;
+  width: 100px;
+  height: 100px;
+  //border-radius: 50%;
+  //background: rgba(3,3,3,.8);
+  overflow: hidden;
+  opacity: 0.4;
+  //box-shadow: 10px 10px 30px #000;
+}
+#login-figure-2 {
+  cursor: pointer;
+  position: absolute;
+  top: 250px;
+  //left: 0;
+  right: 0;
+  bottom: 0;
+  //padding: 30px;
+  margin: inherit;
+  width: 100px;
+  height: 100px;
+  //border-radius: 50%;
+  //background: rgba(3,3,3,.8);
+  overflow: hidden;
+  opacity: 0.4;
+  //box-shadow: 10px 10px 30px #000;
+}
+.title-icon-1 {
+  position: absolute;
+  color: #0f385a;
+  top: 350px;
+  left: 60px;
+  right: 0;
+  bottom: 0;
+  margin: inherit;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  opacity: 0.7;
+  font-size: 20px;
+}
+.title-icon-1_2 {
+  position: absolute;
+  color: #0f385a;
+  top: 375px;
+  left: 60px;
+  right: 0;
+  bottom: 0;
+  margin: inherit;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.title-icon-2 {
+  position: absolute;
+  color: #0f385a;
+  top: 350px;
+  //left: 60px;
+  right: 0;
+  bottom: 0;
+  margin: inherit;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  font-size: 20px;
+}
+.title-icon-2_2 {
+  position: absolute;
+  color: #0f385a;
+  top: 375px;
+  //left: 60px;
+  right: 0;
+  bottom: 0;
+  margin: inherit;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  font-size: 20px;
+  font-weight: bold;
+}
+.mat-input-element {
+  min-width: 310px;
+  margin-top: 40px;
+  border: groove;
+  outline: none;
+  border-radius: 50px;
+  font-size: 18px;
+  position: static;
+  text-align: center;
+}
+.material-icons{
+    padding: 0px 100px;
+}
+
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+
+.login-button{
+    background-color: #0f385a;
+    padding: 0px 10px;
+    border-radius: 50px;
+    font-size: medium;
+    font-family: arial;
+    min-width: 310px;
+    margin: 30px 5px;
+    color: white;
+}
+.mat-card-content>:last-child:not(.mat-card-footer), .mat-card>:last-child:not(.mat-card-footer){
+    //border: groove;
+    width: 360px;
+    height: 350px;
+    padding: 10px;
+}
+.loginForm{
+    //border: groove;
+    margin: 2px 0px
+}
