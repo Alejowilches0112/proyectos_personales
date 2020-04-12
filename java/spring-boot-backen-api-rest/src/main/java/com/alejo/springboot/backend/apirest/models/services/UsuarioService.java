@@ -1,6 +1,6 @@
 package com.alejo.springboot.backend.apirest.models.services;
 
-import java.util.List;
+/*import java.util.List;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -18,10 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alejo.springboot.backend.apirest.model.entity.Usuario;
 import com.alejo.springboot.backend.apirest.models.dao.IUsuarioDao;
 
-@Service
-public class UsuarioService implements UserDetailsService{
+@Service*/
+public class UsuarioService /*implements UserDetailsService*/{
 	
-	private Logger log = LoggerFactory.getLogger(UsuarioService.class);
+/*	private Logger log = LoggerFactory.getLogger(UsuarioService.class);
 	
 	@Autowired
 	private IUsuarioDao usuarioDao;
@@ -29,7 +29,7 @@ public class UsuarioService implements UserDetailsService{
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String usr) throws UsernameNotFoundException 
 	{
-
+		System.err.println(usr);
 		Usuario u = usuarioDao.findByUsuario(usr);
 		if(u == null)
 		{
@@ -43,6 +43,6 @@ public class UsuarioService implements UserDetailsService{
 				.peek(auto -> log.info("Rol: "+auto.getAuthority()))
 				.collect(Collectors.toList());
 		return new User(usr, u.getClave(), u.isEnabled(),true, true, true, authorities);
-	}
+	}*/
 
 }

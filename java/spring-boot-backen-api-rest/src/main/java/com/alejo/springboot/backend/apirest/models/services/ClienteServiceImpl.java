@@ -3,6 +3,8 @@ package com.alejo.springboot.backend.apirest.models.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,9 +51,20 @@ public class ClienteServiceImpl implements IClienteService {
 
 	@Override
 	@Transactional
-	public String procedureName(String param1, String param2) {
-		String outParam = clienteDao.procedureName(param1, param2);
+	public long procedureName(String param1) {
+		long outParam = clienteDao.procedureName(param1);
 		return outParam;
+	}
+	@Override
+	@Transactional
+	public long functionName(Long param1) {
+		long outParam = clienteDao.functionName(param1);
+		return outParam;
+	}
+	@Override
+	public Page<Cliente> findAll(Pageable pageable) {
+		// TODO Auto-generated method stub
+		return clienteDao.findAll(pageable);
 	}
 
 

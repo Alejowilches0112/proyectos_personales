@@ -8,8 +8,6 @@ import { ApiService } from './servicios/api.service';
 import { AppServiceService } from './servicios/authService';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { MegaMenuModule } from 'primeng/megamenu';
-
 @NgModule({
   declarations: [
     AppComponent, HeaderComponent, FooterComponent],
@@ -17,8 +15,7 @@ import { MegaMenuModule } from 'primeng/megamenu';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule,
-    MegaMenuModule,
+    HttpClientModule
   ],
   providers: [ApiService, AppServiceService],
   bootstrap: [AppComponent]

@@ -120,7 +120,7 @@ export class FormComponent implements OnInit {
         swal('La imagen ha subido completamente!', response.mensaje, 'success');
         this.progreso = 0;
         this.cliente = response.cliente;
-        //this.backEvent.emit(0);
+        this.backEvent.emit(0);
       }
     }, error => {
       swal({
