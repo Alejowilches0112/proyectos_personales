@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../servicios/api.service';
+import { Router } from '@angular/router';
+import { HttpEventType } from '@angular/common/http';
 import swal from 'sweetalert2';
-
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-clientes',
@@ -9,52 +11,102 @@ import swal from 'sweetalert2';
   styleUrls: ['./clientes.component.scss']
 })
 export class ClientesComponent implements OnInit {
-  public clientes:any;
-  private cliente:any;
+  public clientes: any;
+  public cliente: any;
   public cols = [];
   public idCliente = null;
   public loadId = false;
   public addClient = false;
+  public tableData = {
+    row: 5,
+    totalElements: 0,
+    firstPage: true,
+    lastPage: false,
+    totPage: 1,
+    offset: 0,
+    pageAct: 1
+  };
+  public rows = [5, 10, 20];
   private urlEnPoint = 'clientes';
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private router: Router) { }
 
   ngOnInit() {
-    this.list();
+
     this.cols = [
       {header: 'Id', field: 'id'},
       {header: 'Nombre', field: 'nombre'},
       {header: 'Apellido', field: 'apellido'},
-      {header: 'Email', field: 'email'}
+      {header: 'Email', field: 'email'},
+      {header: 'Fecha Registro', field: 'createAt'}
     ];
   }
 
-  public list(){
-    this.api.get(this.urlEnPoint,'application/json').toPromise().then(data=>{
-      this.clientes = data;
+  public List() {
+    this.api.get(`${this.urlEnPoint}/page/0/${this.tableData.row}`, 'application/json').toPromise().then(d => {
+      if (d.type === HttpEventType.Response) {
+        const data: any = d.body;
+        this.clientes = data.content;
+        for (let i of this.clientes) {
+          i.createAt = moment(i.createAt).format('DD/MM/YYYY');
+        }
+        this.tableData.row = data.size;
+        this.tableData.firstPage = data.first;
+        this.tableData.lastPage = data.last;
+        this.tableData.totPage = data.totalPages;
+        this.tableData.totalElements = data.totalElements;
+      }
+
     }, error => {
       swal({
-        title: error['error']['mensaje'], 
-        text: error['error']['error'], 
-        type:'error'
+        title: error.error.mensaje,
+        text: error.error.error,
+        type: 'error'
       });
     });
   }
-  public selectItem(item){
+
+  public loadList(event) {
+    this.tableData.row = (this.rows.indexOf(event.rows) > -1) ? event.rows : this.tableData.row;
+    const page = event.first / this.tableData.row;
+    this.api.get(`${this.urlEnPoint}/page/${page}/${this.tableData.row}`, 'application/json').toPromise().then(d => {
+      if (d.type === HttpEventType.Response) {
+        const data: any = d.body;
+        this.clientes = data.content;
+        for (let i of this.clientes) {
+          i.createAt = moment(i.createAt).format('DD/MM/YYYY');
+        }
+        this.tableData.row = data.size;
+        this.tableData.firstPage = data.first;
+        this.tableData.lastPage = data.last;
+        this.tableData.totPage = data.totalPages;
+        this.tableData.totalElements = data.totalElements;
+      }
+    }, error => {
+      swal({
+        title: error.error.mensaje,
+        text: error.error.error,
+        type: 'error'
+      });
+    });
+  }
+  public selectItem(item) {
     this.idCliente = item.id;
     this.loadId = true;
     this.addClient = false;
   }
-  public changeView($event){
+  public changeView($event) {
     this.loadId = false;
     this.addClient = false;
-    if($event == 0) this.list();
+    if ($event === 0) {
+      this.List();
+    }
   }
-  
-  public delete(item){
+
+  public delete(item) {
     swal({
-      title: '¿Está Seguro?', 
-      text: `¿Esta seguro de Eliminar a ${item.nombre} ${item.apellido}?`, 
-      type:'question',
+      title: '¿Está Seguro?',
+      text: `¿Esta seguro de Eliminar a ${item.nombre} ${item.apellido}?`,
+      type: 'question',
       confirmButtonText: 'Si',
       cancelButtonText: 'No',
       confirmButtonClass: 'btn btn-success',
@@ -65,13 +117,14 @@ export class ClientesComponent implements OnInit {
       buttonsStyling: false,
       reverseButtons: true
     }).then(result => {
-      if(result.value){
+      if (result.value) {
         this.api.delete(this.urlEnPoint, item.id, 'application/json').toPromise().then(d => {
           swal({
-            title: 'Éxito', 
-            text: `Cliente Eliminado con ëxito`, 
-            type:'success',
+            title: 'Éxito',
+            text: `Cliente Eliminado con ëxito`,
+            type: 'success',
             showConfirmButton: false});
+            // tslint:disable-next-line: align
             this.clientes = this.clientes.filter( cli => cli !== item);
         });
       }

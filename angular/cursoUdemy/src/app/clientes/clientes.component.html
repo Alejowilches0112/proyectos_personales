@@ -1,57 +1,62 @@
 <div *ngIf="!loadId && !addClient" class="card border-primary mb-3">
-  <div class="card-header">Clientes</div>
-  <div class="card-body text-primary">
-    <h5 class="card-title">Listado de clientes</h5>
-    <div class="my-2 text-right">
-      <span class="btn btn-xs" (click)="addClient = true">
+    <div class="card-header">Clientes</div>
+    <div class="card-body text-primary">
+        <h5 class="card-title">Listado de clientes</h5>
+        <div class="my-2 text-right">
+            <span class="btn btn-xs" (click)="addClient = true">
         <i class="fas fa-user-plus" style="color:blue;"></i>
       </span>
-      <button type="button" (click)="dtCliente.exportCSV()" style="color:green; margin-right: 0.5em;"
-        class="btn btn-xs">
+            <button type="button" (click)="dtCliente.exportCSV()" style="color:green; margin-right: 0.5em;" class="btn btn-xs">
         <i class="fas fa-file-csv"></i>
       </button>
-    </div>
-    <p-table #dtCliente [columns]="cols" [value]="clientes" selectionMode="multiple"
-      [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="cliente" dataKey="id"  >
-      <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th *ngFor="let col of columns" style="width: 10px;" >
-            {{col.header}}
-          </th>
-          <th style="width: 20px">
-            Acciones
-          </th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr style="height:30px;">
-          <td *ngFor="let col of columns">
-            {{rowData[col.field]}}
-          </td>
-          <td >
-            <span class="btn btn-xs text-center" style="margin:0px 15px;" (click)="selectItem(rowData)">
+        </div>
+        <p-table #dtCliente [columns]="cols" [value]="clientes" [pageLinks]="tableData.totPage" selectionMode="multiple" [paginator]="true" [totalRecords]="tableData.totalElements" [rows]="tableData.row" [rowsPerPageOptions]="rows" selectionMode="single" [(selection)]="cliente"
+            [lazy]="true" (onLazyLoad)="loadList($event)" dataKey="id" [showCurrentPageReport]="true">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" style="width: 10px;">
+                        {{col.header}}
+                    </th>
+                    <th style="width: 20px">
+                        Acciones
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr style="height:30px;">
+                    <td *ngFor="let col of columns">
+                        <span *ngIf="col.field === 'id'">
+                          <img *ngIf="rowData['foto']" src="http://localhost:8080/api/uploads/img/{{rowData['foto']}}" class="img-thumbnail rounded" style="width: 64px; cursor: pointer;">
+                          <img *ngIf="!rowData['foto']" src="http://localhost:8080/images/no-usuario.png" class="img-thumbnail rounded" style="width: 64px; cursor: pointer;">
+                        </span>
+                        <span *ngIf="col.field != 'id'">
+                          {{rowData[col.field] }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="btn btn-xs text-center" style="margin:0px 15px;" (click)="selectItem(rowData)">
               <i class="fas fa-user-edit" style="color:green"></i>
             </span>
-            <span (click)="delete(rowData)">
+                        <span (click)="delete(rowData)">
               <i class="fas fa-user-times" style="color:red"></i>
             </span>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="emptymessage" let-columns>
-        <tr>
-          <td [attr.colspan]="columns.length">
-            No hay Clientes Registrados
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="columns.length">
+                        No hay Clientes Registrados
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
 
-  </div>
+    </div>
 </div>
 <div *ngIf="loadId">
-  <app-form-cliente [idCliente]="idCliente" (backEvent)="changeView($event)"></app-form-cliente>
+    <app-form-cliente [idCliente]="idCliente" (backEvent)="changeView($event)"></app-form-cliente>
 </div>
 <div *ngIf="addClient">
-  <app-form-cliente [idCliente]="" (backEvent)="changeView($event)"></app-form-cliente>
+    <app-form-cliente [idCliente]="" (backEvent)="changeView($event)"></app-form-cliente>
 </div>

@@ -5,13 +5,20 @@ import { ClientesComponent } from './clientes.component';
 import { FormComponent } from './form/form.component';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
+import { CalendarModule } from 'primeng/calendar';
+import { FileUploadModule } from 'primeng/fileupload';
+import { SelectComponent } from '../personalizados/select/select.component';
+import { InputTextModule } from 'primeng/inputtext';
 @NgModule({
-  declarations: [ClientesComponent, FormComponent],
+  declarations: [ClientesComponent, FormComponent, SelectComponent],
   imports: [
     CommonModule,
     ClientesRoutingModule,
     FormsModule,
-    TableModule
+    TableModule,
+    CalendarModule,
+    FileUploadModule,
+    InputTextModule
   ]
 })
 export class ClientesModule { }

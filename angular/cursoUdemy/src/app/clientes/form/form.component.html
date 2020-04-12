@@ -1,27 +1,54 @@
-<div  class="card bg-dark text-white">
-    <div class="card-header"> 
-        <span (click)="backEvent.emit(1)">
-            <i class="fas fa-arrow-left"></i>
-        </span>
+<div class="card bg-dark text-white">
+    <div class="card-header">
+        <span (click)="backEvent.emit(0)">
+      <i class="fas fa-arrow-left"></i>
+    </span>
         <h5 style="text-align: center;">{{titulo}}</h5>
     </div>
     <div class="card-body">
         <form #formData="ngForm">
+            <div class="row">
+                <div class="input-group col-sm-4"></div>
+                <div *ngIf="idCliente && cliente.foto">
+                    <img src="http://localhost:8080/api/uploads/img/{{cliente.foto}}" class="img-circle" style="border-radius: 50px; width: 200px; height: 200px;">
+                </div>
+            </div>
             <div class="form-group row">
-                <label for="nombre" class="col-form-label col-sm-2">Nombre</label>
+                <div class="input-group col-sm-9">
+                    <div class="custom-file">
+                        <input pInputText type="file" (change)="onUpload($event)" accept="image/*" capture="camera" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" style="top: 10px;">
+                        <label class="custom-file-label" for="inputGroupFile01">{{ !nameFile ? 'Buscar Archivo' : nameFile}}</label>
+                    </div>
+                    <span class="fas fa-check-circle" style="color: green; font-size: 30px;" *ngIf="nameFile && !errorFile"></span>
+                    <span class="fas fa-times-circle" style="color: red; font-size: 30px;" *ngIf="errorFile"></span>
+                </div>
+            </div>
+            <div class="form-group row">
                 <div class="col-sm-6">
-                    <input type="text" [(ngModel)]="cliente.nombre" name="nombre" required #nombre="ngModel"/>
-                    <div class="text text-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
-                        <div *ngIf="nombre.errors.required">
-                            El Nombre es requerido 
+                    <label for="nombre" class="col-form-label col-sm-3">Identificacion</label>
+                    <input pInputText type="number" [(ngModel)]="cliente.identificacion" name="identificacion" required #identificacion="ngModel" />
+                    <div class="text text-danger" *ngIf="identificacion.invalid && (identificacion.dirty || identificacion.touched)">
+                        <div *ngIf="identificacion.errors.required">
+                            La identificacion es requerida
                         </div>
                     </div>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="apellido" class="col-form-label col-sm-2">Apellido</label>
                 <div class="col-sm-6">
-                    <input type="text" [(ngModel)]="cliente.apellido" required name="apellido" #apellido="ngModel"/>
+                    <label for="nombre" class="col-form-label col-sm-3">Nombre</label>
+                    <input pInputText type="text" [(ngModel)]="cliente.nombre" name="nombre" required #nombre="ngModel" />
+                    <div class="text text-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                        <div *ngIf="nombre.errors.required">
+                            El Nombre es requerido
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="apellido" class="col-form-label col-sm-3">Apellido</label>
+                    <input pInputText type="text" [(ngModel)]="cliente.apellido" required name="apellido" #apellido="ngModel" />
                     <div class="text text-danger" *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
                         <div *ngIf="apellido.errors.required">
                             El Apellido es requerido
@@ -30,9 +57,9 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="email" class="col-form-label col-sm-2"> Email </label>
                 <div class="col-sm-6">
-                    <input type="email" [(ngModel)]="cliente.email" required email name="email" #email="ngModel"/>
+                    <label for="email" class="col-form-label col-sm-3"> Email </label>
+                    <input pInputText type="email" [(ngModel)]="cliente.email" required email name="email" #email="ngModel" />
                     <div class="text text-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
                         <div *ngIf="email.errors.required">
                             El Email es requerido
@@ -43,11 +70,24 @@
                     </div>
                 </div>
             </div>
-
             <div class="form-group row">
                 <div class="col-sm-6">
+                    <label for="apellido" class="col-form-label col-sm-3">Fecha de Registro</label>
+                    <p-calendar [(ngModel)]="cliente.createAt" [disabled]="idCliente" #createAt="ngModel" [locale]="es" [ngModelOptions]="{standalone: true}" dateFormat="yy-mm-dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="1970:2050" [showIcon]="true" required></p-calendar>
+                    <div class="text text-danger" *ngIf="createAt.invalid && (createAt.dirty || createAt.touched)">
+                        <div *ngIf="createAt.errors.required">
+                            La Fecha de Registro es requerida
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <selectList (select)="'regiones'" (placeholder)="'Regiones'"></selectList>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-12">
                     <button *ngIf="!edit" class="btn btn-primary" [disabled]="!formData.form.valid" (click)="create()" role="button"> Crear</button>
-                    <button *ngIf="edit"  class="btn btn-primary" [disabled]="!formData.form.valid" (click)="update()" role="button"> Editar </button>
+                    <button *ngIf="edit" class="btn btn-primary" [disabled]="!formData.form.valid" (click)="update()" role="button"> Editar </button>
                 </div>
             </div>
         </form>
