@@ -82,11 +82,15 @@ export class ClientesComponent implements OnInit {
         this.tableData.totalElements = data.totalElements;
       }
     }, error => {
-      swal({
-        title: error.error.mensaje,
-        text: error.error.error,
-        type: 'error'
-      });
+      if (error.status === 401) {
+        this.router.navigate(['/login']);
+      } else {
+        swal({
+          title: error.error.mensaje,
+          text: error.error.error,
+          type: 'error'
+        });
+      }
     });
   }
   public selectItem(item) {

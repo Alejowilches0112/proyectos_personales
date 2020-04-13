@@ -10,8 +10,8 @@
         <i class="fas fa-file-csv"></i>
       </button>
         </div>
-        <p-table #dtCliente [columns]="cols" [value]="clientes" [pageLinks]="tableData.totPage" selectionMode="multiple" [paginator]="true" [totalRecords]="tableData.totalElements" [rows]="tableData.row" [rowsPerPageOptions]="rows" selectionMode="single" [(selection)]="cliente"
-            [lazy]="true" (onLazyLoad)="loadList($event)" dataKey="id" [showCurrentPageReport]="true">
+        <p-table #dtCliente [columns]="cols" [value]="clientes" selectionMode="multiple" [paginator]="true" [totalRecords]="tableData.totalElements" [rows]="tableData.row" [rowsPerPageOptions]="rows" selectionMode="single" [(selection)]="cliente" [lazy]="true"
+            (onLazyLoad)="loadList($event)" dataKey="id">
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <th *ngFor="let col of columns" style="width: 10px;">

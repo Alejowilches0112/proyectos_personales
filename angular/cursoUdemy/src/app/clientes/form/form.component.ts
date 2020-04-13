@@ -10,6 +10,8 @@ import {Subject, Observable} from 'rxjs';
   templateUrl: './form.component.html'
 })
 export class FormComponent implements OnInit {
+  @Input() public idCliente: number;
+  @Output() public backEvent = new EventEmitter<number>();
   public cliente: Clientes = new Clientes();
   private urlEnPoint = 'clientes';
   public edit = false;
@@ -17,15 +19,17 @@ export class FormComponent implements OnInit {
   public errorFile = false;
   public nameFile: string;
   public progreso = 0;
+  public regiones = [];
   protected prueba = 'prueba';
-  constructor(private api: ApiService) { }
-  @Input() public idCliente: number;
-  @Output() public backEvent = new EventEmitter<number>();
   public titulo;
   es: any;
+
+  constructor(private api: ApiService) { }
+
   ngOnInit() {
     this.titulo = (this.idCliente) ? 'EDITAR CLIENTE' : 'NUEVO CLIENTE';
     this.loadId(this.idCliente);
+    this.listRegiones();
     this.es = {
       firstDayOfWeek: 1,
       dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
@@ -38,6 +42,19 @@ export class FormComponent implements OnInit {
       clear: 'Borrar'
     };
   }
+  public listRegiones() {
+    this.regiones = [];
+    this.api.get(`${this.urlEnPoint}/regiones`, 'application/json').toPromise().then(d => {
+      if (d.type === HttpEventType.Response) {
+        const response: any = d.body;
+        this.regiones = [{label: '', value: null}];
+        for(let i of response.regiones) {
+          this.regiones = [...this.regiones, {label: i.nombre, value: i}];
+        }
+      }
+    });
+  }
+
   public loadId(id) {
     if (id) {
       this.api.getId(this.urlEnPoint, id, 'application/json').toPromise().then(d => {
@@ -58,6 +75,7 @@ export class FormComponent implements OnInit {
       });
     }
   }
+
   public create(): void {
     if (this.idCliente) {
       this.subirImagen(this.idCliente);
@@ -81,6 +99,7 @@ export class FormComponent implements OnInit {
       });
     });
   }
+
   public update(): void {
     this.api.put(this.urlEnPoint, this.idCliente, this.cliente, 'application/json').toPromise().then(d => {
       if (d.type === HttpEventType.Response) {
@@ -100,6 +119,7 @@ export class FormComponent implements OnInit {
       });
     });
   }
+
   onUpload(event) {
     this.file = event.target.files[0];
     this.nameFile = this.file.name;
@@ -108,6 +128,7 @@ export class FormComponent implements OnInit {
       this.file = null;
     }
   }
+
   public subirImagen(id) {
     const data = new FormData();
     data.append('file', this.file);

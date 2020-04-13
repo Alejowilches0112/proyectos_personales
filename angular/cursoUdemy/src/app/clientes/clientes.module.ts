@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
 @NgModule({
   declarations: [ClientesComponent, FormComponent],
   imports: [
@@ -15,7 +16,8 @@ import { InputTextModule } from 'primeng/inputtext';
     FormsModule,
     TableModule,
     CalendarModule,
-    InputTextModule
+    InputTextModule,
+    DropdownModule
   ]
 })
 export class ClientesModule { }

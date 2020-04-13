@@ -31,7 +31,7 @@ public class Cliente implements Serializable {
 	private long id;
 	
 	@NotNull(message="No puede ser vacío")
-	@Column(nullable=false)
+	@Column(unique = true ,nullable=false)
 	private long identificacion;
 	
 	@NotEmpty(message="No puede ser vacío")

@@ -24,11 +24,19 @@ export class LoginComponent implements OnInit {
 
   private login() {
     if (!this.usuario.username || !this.usuario.password) {
-      swal('error', 'usuario o clave incorrectos', 'error');
+      swal('Acceso Denegado', 'Usuario o Contraseña vacíos!', 'error');
       return;
     }
     this.auth.login(this.usuario).toPromise().then( d => {
-      swal('success', `${this.usuario.username} haz inciado sesión correctamente`, 'success');
+      const response: any = d.type;
+      this.auth.guardarUsuario(response.access_token);
+      this.auth.guardarToken(response.access_token);
+      const usr = this.auth.usuario;
+      swal('success', `${usr.username} haz inciado sesión correctamente`, 'success');
+    }, err => {
+      if ( err.status === 400) {
+        swal('Acceso Denegado', `Usuario o Contraseña incorrectos.`, 'error');
+      }
     });
   }
 }

@@ -8,6 +8,8 @@ import { ApiService } from './servicios/api.service';
 import { AppServiceService } from './servicios/authService';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { DeviceDetectorModule } from 'ngx-device-detector';
+
 @NgModule({
   declarations: [
     AppComponent, HeaderComponent, FooterComponent],
@@ -15,7 +17,8 @@ import { FooterComponent } from './footer/footer.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    DeviceDetectorModule
   ],
   providers: [ApiService, AppServiceService],
   bootstrap: [AppComponent]

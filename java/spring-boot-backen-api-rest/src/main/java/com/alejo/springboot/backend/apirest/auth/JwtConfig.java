@@ -1,7 +1,7 @@
 package com.alejo.springboot.backend.apirest.auth;
 
 public class JwtConfig {
-	public static final String LLAVE_SECRETA = "B1T4C0R4.R3T0S.2020@P0L1";
+public static final String LLAVE_SECRETA = "B1T4C0R4.R3T0S.2020@P0L1";
 	
 	public static final String RSA_PRIVATE = "-----BEGIN RSA PRIVATE KEY-----\r\n" + 
 			"MIIEpAIBAAKCAQEA1T8WaymxFIRc4yZamG+sxwWZOXM7lZ9EWVQsZnM1vuuutJyj\r\n" + 

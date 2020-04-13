@@ -1,4 +1,4 @@
-export class Regiones {
+export class Region {
   id: number;
   nombre: string;
 }

@@ -42,7 +42,7 @@ import com.alejo.springboot.backend.apirest.model.entity.Region;
 import com.alejo.springboot.backend.apirest.models.services.IClienteService;
 import com.alejo.springboot.backend.apirest.models.services.IRegionService;
 
-@CrossOrigin(origins = { "http://localhost:4200", "http://localhost:8082" })
+//@CrossOrigin(origins = { "http://localhost:4200", "http://localhost:8082" })
 @RestController
 @RequestMapping("/api")
 public class ClienteRestController {
