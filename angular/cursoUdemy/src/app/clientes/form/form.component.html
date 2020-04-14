@@ -84,8 +84,13 @@
             <div class="form-group row">
                 <div class="col-sm-6">
                     <label for="regiones" class="col-form-label col-sm-3">Región</label>
-                    <p-dropdown [ngModelOptions]="{standalone: true}" [options]="regiones" [(ngModel)]="cliente.region">
+                    <p-dropdown [ngModelOptions]="{standalone: true}" [options]="regiones" required [(ngModel)]="cliente.region" #region="ngModel">
                     </p-dropdown>
+                    <div class="text text-danger" *ngIf="region.invalid && (region.dirty || region.touched)">
+                        <div *ngIf="region.errors.required">
+                            La Región es requerida
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-group row">

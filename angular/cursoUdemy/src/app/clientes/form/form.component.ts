@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Clientes } from '../../entities/clientes';
 import { ApiService } from '../../servicios/api.service';
+import { AppServiceService } from '../../servicios/authService';
 import { HttpEventType } from '@angular/common/http';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
@@ -24,7 +25,7 @@ export class FormComponent implements OnInit {
   public titulo;
   es: any;
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private auth: AppServiceService) { }
 
   ngOnInit() {
     this.titulo = (this.idCliente) ? 'EDITAR CLIENTE' : 'NUEVO CLIENTE';
@@ -44,7 +45,7 @@ export class FormComponent implements OnInit {
   }
   public listRegiones() {
     this.regiones = [];
-    this.api.get(`${this.urlEnPoint}/regiones`, 'application/json').toPromise().then(d => {
+    this.api.get(`${this.urlEnPoint}/regiones`, 'application/json', this.auth.token).toPromise().then(d => {
       if (d.type === HttpEventType.Response) {
         const response: any = d.body;
         this.regiones = [{label: '', value: null}];
@@ -57,7 +58,7 @@ export class FormComponent implements OnInit {
 
   public loadId(id) {
     if (id) {
-      this.api.getId(this.urlEnPoint, id, 'application/json').toPromise().then(d => {
+      this.api.getId(this.urlEnPoint, id, 'application/json', this.auth.token).toPromise().then(d => {
         if (d.type === HttpEventType.Response) {
           const response: any = d.body;
           console.log(response);
@@ -80,7 +81,7 @@ export class FormComponent implements OnInit {
     if (this.idCliente) {
       this.subirImagen(this.idCliente);
     }
-    this.api.post(this.urlEnPoint, this.cliente, 'application/json').toPromise().then(d => {
+    this.api.post(this.urlEnPoint, this.cliente, 'application/json', this.auth.token).toPromise().then(d => {
       if (d.type === HttpEventType.Response) {
         const response: any = d.body;
         swal('Cliente Creado', `El Cliente ${response.cliente.nombre} fue creado`, 'success');
@@ -92,6 +93,7 @@ export class FormComponent implements OnInit {
         }
       }
     }, error => {
+      console.log(error)
       swal({
         title: error.error.mensaje,
         text: error.error.error,
@@ -101,7 +103,7 @@ export class FormComponent implements OnInit {
   }
 
   public update(): void {
-    this.api.put(this.urlEnPoint, this.idCliente, this.cliente, 'application/json').toPromise().then(d => {
+    this.api.put(this.urlEnPoint, this.idCliente, this.cliente, 'application/json', this.auth.token).toPromise().then(d => {
       if (d.type === HttpEventType.Response) {
         const response: any = d.body;
         swal('Cliente Actualizado', `El Cliente ${response.cliente.nombre} fue Actualizado`, 'success');
@@ -123,7 +125,7 @@ export class FormComponent implements OnInit {
   onUpload(event) {
     this.file = event.target.files[0];
     this.nameFile = this.file.name;
-    if (this.file.type.indexOf('image') > -1) {
+    if (this.file.type.indexOf('image') === -1) {
       this.errorFile = true;
       this.file = null;
     }
@@ -133,7 +135,7 @@ export class FormComponent implements OnInit {
     const data = new FormData();
     data.append('file', this.file);
     data.append('id', id);
-    this.api.upload(`${this.urlEnPoint}/upload`, data).toPromise().then(d => {
+    this.api.upload(`${this.urlEnPoint}/upload`, data, this.auth.token).toPromise().then(d => {
       if (d.type === HttpEventType.UploadProgress) {
         this.progreso = Math.round(100 * (d.loaded / d.total));
       } else if (d.type === HttpEventType.Response) {

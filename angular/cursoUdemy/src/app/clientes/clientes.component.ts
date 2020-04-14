@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../servicios/api.service';
 import { Router } from '@angular/router';
 import { HttpEventType } from '@angular/common/http';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
+import { ApiService } from '../servicios/api.service';
+import { AppServiceService } from '../servicios/authService';
+
 
 @Component({
   selector: 'app-clientes',
@@ -28,7 +30,7 @@ export class ClientesComponent implements OnInit {
   };
   public rows = [5, 10, 20];
   private urlEnPoint = 'clientes';
-  constructor(private api: ApiService, private router: Router) { }
+  constructor(private api: ApiService, private router: Router, private auth: AppServiceService) { }
 
   ngOnInit() {
 
@@ -42,7 +44,7 @@ export class ClientesComponent implements OnInit {
   }
 
   public List() {
-    this.api.get(`${this.urlEnPoint}/page/0/${this.tableData.row}`, 'application/json').toPromise().then(d => {
+    this.api.get(`${this.urlEnPoint}/page/0/${this.tableData.row}`, 'application/json', this.auth.token).toPromise().then(d => {
       if (d.type === HttpEventType.Response) {
         const data: any = d.body;
         this.clientes = data.content;
@@ -68,7 +70,7 @@ export class ClientesComponent implements OnInit {
   public loadList(event) {
     this.tableData.row = (this.rows.indexOf(event.rows) > -1) ? event.rows : this.tableData.row;
     const page = event.first / this.tableData.row;
-    this.api.get(`${this.urlEnPoint}/page/${page}/${this.tableData.row}`, 'application/json').toPromise().then(d => {
+    this.api.get(`${this.urlEnPoint}/page/${page}/${this.tableData.row}`, 'application/json', this.auth.token).toPromise().then(d => {
       if (d.type === HttpEventType.Response) {
         const data: any = d.body;
         this.clientes = data.content;
@@ -122,7 +124,7 @@ export class ClientesComponent implements OnInit {
       reverseButtons: true
     }).then(result => {
       if (result.value) {
-        this.api.delete(this.urlEnPoint, item.id, 'application/json').toPromise().then(d => {
+        this.api.delete(this.urlEnPoint, item.id, 'application/json', this.auth.token).toPromise().then(d => {
           swal({
             title: 'Éxito',
             text: `Cliente Eliminado con ëxito`,

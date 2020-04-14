@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario} from '../entities/usuario';
 import { AppServiceService } from '../servicios/authService';
 import { Router } from '@angular/router';
+import { HttpEventType } from '@angular/common/http';
 import swal from 'sweetalert2';
 
 
@@ -20,19 +21,25 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.auth.isAuth()) {
+      this.router.navigate([ '/clientes' ]);
+    }
   }
 
-  private login() {
+  public login() {
     if (!this.usuario.username || !this.usuario.password) {
       swal('Acceso Denegado', 'Usuario o Contraseña vacíos!', 'error');
       return;
     }
     this.auth.login(this.usuario).toPromise().then( d => {
-      const response: any = d.type;
-      this.auth.guardarUsuario(response.access_token);
-      this.auth.guardarToken(response.access_token);
-      const usr = this.auth.usuario;
-      swal('success', `${usr.username} haz inciado sesión correctamente`, 'success');
+      if (d.type === HttpEventType.Response) {
+        const response: any = d.body;
+        this.auth.guardarUsuario(response.access_token);
+        this.auth.guardarToken(response.access_token);
+        this.router.navigate([ '/clientes' ]);
+      } else {
+        console.log(d);
+      }
     }, err => {
       if ( err.status === 400) {
         swal('Acceso Denegado', `Usuario o Contraseña incorrectos.`, 'error');

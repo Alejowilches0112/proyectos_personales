@@ -12,18 +12,18 @@ export class AppServiceService {
   constructor(private http: HttpClient) { }
 
   public get usuario(): Usuario {
-    if (this._usuario !== null) {
+    if (this._usuario !== null && this._usuario !== undefined) {
       return this._usuario;
-    } else if ( this._usuario === null && sessionStorage.getItem('usuario_angularApp') !== null) {
-      this._usuario = JSON.parse(atob(sessionStorage.getItem('usuario_angularApp'))) as Usuario;
+    } else if ( (this._usuario === null || this._usuario === undefined) && sessionStorage.getItem('usuario_angularApp') !== null) {
+      this._usuario = JSON.parse(sessionStorage.getItem('usuario_angularApp')) as Usuario;
       return this._usuario;
     }
     return new Usuario();
   }
   public get token(): string {
-    if (this._token !== null) {
+    if (this._token) {
       return this._token;
-    } else if ( this._token === null && sessionStorage.getItem('token_angularApp') !== null) {
+    } else if ( !this._token && sessionStorage.getItem('token_angularApp') !== null) {
       this._token = sessionStorage.getItem('token_angularApp');
       return this._token;
     }
@@ -50,7 +50,8 @@ export class AppServiceService {
     this._usuario.apellido = data.apellido_usuario;
     this._usuario.email = data.email_usuario;
     this._usuario.roles = data.authorities;
-    sessionStorage.setItem('usuario_angularApp', btoa(JSON.stringify(this._usuario)));
+    this.usuario.username = data.username;
+    sessionStorage.setItem('usuario_angularApp', JSON.stringify(this._usuario));
   }
 
   public guardarToken(accessToken) {
@@ -60,8 +61,23 @@ export class AppServiceService {
 
   private obtenerDatosToken(accessToken) {
     if (accessToken) {
-      return JSON.parse(atob(accessToken).split('.')[1]);
+      return JSON.parse(atob(accessToken.split('.')[1]));
     }
     return null;
+  }
+  public isAuth() {
+    const data = this.obtenerDatosToken(this.token);
+    if (data !== null && data.username && data.username.length > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  public logout() {
+    this._token = null;
+    this._usuario = null;
+    sessionStorage.clear();
+    sessionStorage.removeItem('usuario_angularApp');
+    sessionStorage.removeItem('token_angularApp');
   }
 }
