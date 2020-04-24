@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpEventType } from '@angular/common/http';
-import swal from 'sweetalert2';
-import * as moment from 'moment';
 import { ApiService } from '../servicios/api.service';
 import { AppServiceService } from '../servicios/authService';
+import swal from 'sweetalert2';
+import * as moment from 'moment';
 
 
 @Component({
@@ -38,8 +38,7 @@ export class ClientesComponent implements OnInit {
       {header: 'Id', field: 'id'},
       {header: 'Nombre', field: 'nombre'},
       {header: 'Apellido', field: 'apellido'},
-      {header: 'Email', field: 'email'},
-      {header: 'Fecha Registro', field: 'createAt'}
+      {header: 'Email', field: 'email'}
     ];
   }
 
@@ -84,17 +83,14 @@ export class ClientesComponent implements OnInit {
         this.tableData.totalElements = data.totalElements;
       }
     }, error => {
-      if (error.status === 401) {
-        this.router.navigate(['/login']);
-      } else {
-        swal({
-          title: error.error.mensaje,
-          text: error.error.error,
-          type: 'error'
-        });
-      }
+      swal({
+        title: error.error.mensaje,
+        text: error.error.error,
+        type: 'error'
+      });
     });
   }
+
   public selectItem(item) {
     this.idCliente = item.id;
     this.loadId = true;

@@ -23,6 +23,8 @@ public interface IClienteService {
 
 	public long procedureName(String param1);
 	
+	public Cliente getIdCliente(Long id);
+	
 	public long functionName(Long param);
 	
 }

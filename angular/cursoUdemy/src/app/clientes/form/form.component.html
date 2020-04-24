@@ -13,7 +13,7 @@
                     <img src="http://localhost:8080/api/uploads/img/{{cliente.foto}}" class="img-circle" style="border-radius: 50px; width: 200px; height: 200px;">
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row" *ngIf="auth.hasRoles('ROLE_ADMIN')">
                 <div class="input-group col-sm-9">
                     <div class="custom-file">
                         <input pInputText type="file" (change)="onUpload($event)" accept="image/*" capture="camera" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" style="top: 10px;">
@@ -26,7 +26,7 @@
             <div class="form-group row">
                 <div class="col-sm-6">
                     <label for="nombre" class="col-form-label col-sm-3">Identificacion</label>
-                    <input pInputText type="number" [(ngModel)]="cliente.identificacion" name="identificacion" required #identificacion="ngModel" />
+                    <input pInputText type="number" [disabled]="!auth.hasRoles('ROLE_ADMIN')" [(ngModel)]="cliente.identificacion" name="identificacion" required #identificacion="ngModel" />
                     <div class="text text-danger" *ngIf="identificacion.invalid && (identificacion.dirty || identificacion.touched)">
                         <div *ngIf="identificacion.errors.required">
                             La identificacion es requerida
@@ -37,7 +37,7 @@
             <div class="form-group row">
                 <div class="col-sm-6">
                     <label for="nombre" class="col-form-label col-sm-3">Nombre</label>
-                    <input pInputText type="text" [(ngModel)]="cliente.nombre" name="nombre" required #nombre="ngModel" />
+                    <input pInputText [disabled]="!auth.hasRoles('ROLE_ADMIN')" type="text" [(ngModel)]="cliente.nombre" name="nombre" required #nombre="ngModel" />
                     <div class="text text-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
                         <div *ngIf="nombre.errors.required">
                             El Nombre es requerido
@@ -48,7 +48,7 @@
             <div class="form-group row">
                 <div class="col-sm-6">
                     <label for="apellido" class="col-form-label col-sm-3">Apellido</label>
-                    <input pInputText type="text" [(ngModel)]="cliente.apellido" required name="apellido" #apellido="ngModel" />
+                    <input pInputText [disabled]="!auth.hasRoles('ROLE_ADMIN')" type="text" [(ngModel)]="cliente.apellido" required name="apellido" #apellido="ngModel" />
                     <div class="text text-danger" *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
                         <div *ngIf="apellido.errors.required">
                             El Apellido es requerido
@@ -59,7 +59,7 @@
             <div class="form-group row">
                 <div class="col-sm-6">
                     <label for="email" class="col-form-label col-sm-3"> Email </label>
-                    <input pInputText type="email" [(ngModel)]="cliente.email" required email name="email" #email="ngModel" />
+                    <input pInputText [disabled]="!auth.hasRoles('ROLE_ADMIN')" type="email" [(ngModel)]="cliente.email" required email name="email" #email="ngModel" />
                     <div class="text text-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
                         <div *ngIf="email.errors.required">
                             El Email es requerido
@@ -73,7 +73,8 @@
             <div class="form-group row">
                 <div class="col-sm-6">
                     <label for="createAt" class="col-form-label col-sm-3">Fecha de Registro</label>
-                    <p-calendar [(ngModel)]="cliente.createAt" [disabled]="idCliente" #createAt="ngModel" [locale]="es" [ngModelOptions]="{standalone: true}" dateFormat="yy-mm-dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="1970:2050" [showIcon]="true" required></p-calendar>
+                    <p-calendar [(ngModel)]="cliente.createAt" [disabled]="idCliente" #createAt="ngModel" [locale]="es" [ngModelOptions]="{standalone: true}" dateFormat="yy-mm-dd hh:mm" [monthNavigator]="true" [yearNavigator]="true" yearRange="1970:2050" [showIcon]="true"
+                        required></p-calendar>
                     <div class="text text-danger" *ngIf="createAt.invalid && (createAt.dirty || createAt.touched)">
                         <div *ngIf="createAt.errors.required">
                             La Fecha de Registro es requerida
@@ -84,7 +85,7 @@
             <div class="form-group row">
                 <div class="col-sm-6">
                     <label for="regiones" class="col-form-label col-sm-3">Región</label>
-                    <p-dropdown [ngModelOptions]="{standalone: true}" [options]="regiones" required [(ngModel)]="cliente.region" #region="ngModel">
+                    <p-dropdown [disabled]="!auth.hasRoles('ROLE_ADMIN')" [ngModelOptions]="{standalone: true}" [options]="regiones" required [(ngModel)]="cliente.region" #region="ngModel">
                     </p-dropdown>
                     <div class="text text-danger" *ngIf="region.invalid && (region.dirty || region.touched)">
                         <div *ngIf="region.errors.required">
@@ -93,7 +94,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row" *ngIf="auth.hasRoles('ROLE_ADMIN')">
                 <div class="col-sm-12">
                     <button *ngIf="!edit" class="btn btn-primary" [disabled]="!formData.form.valid" (click)="create()" role="button"> Crear</button>
                     <button *ngIf="edit" class="btn btn-primary" [disabled]="!formData.form.valid" (click)="update()" role="button"> Editar </button>

@@ -3,7 +3,7 @@
     <div class="card-body text-primary">
         <h5 class="card-title">Listado de clientes</h5>
         <div class="my-2 text-right">
-            <span class="btn btn-xs" (click)="addClient = true">
+            <span class="btn btn-xs" (click)="addClient = true" *ngIf="auth.hasRoles('ROLE_ADMIN')">
         <i class="fas fa-user-plus" style="color:blue;"></i>
       </span>
             <button type="button" (click)="dtCliente.exportCSV()" style="color:green; margin-right: 0.5em;" class="btn btn-xs">
@@ -17,7 +17,7 @@
                     <th *ngFor="let col of columns" style="width: 10px;">
                         {{col.header}}
                     </th>
-                    <th style="width: 20px">
+                    <th style="width: 20px" *ngIf="auth.hasRoles('ROLE_ADMIN')">
                         Acciones
                     </th>
                 </tr>
@@ -25,21 +25,23 @@
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr style="height:30px;">
                     <td *ngFor="let col of columns">
-                        <span *ngIf="col.field === 'id'">
-                          <img *ngIf="rowData['foto']" src="http://localhost:8080/api/uploads/img/{{rowData['foto']}}" class="img-thumbnail rounded" style="width: 64px; cursor: pointer;">
-                          <img *ngIf="!rowData['foto']" src="http://localhost:8080/images/no-usuario.png" class="img-thumbnail rounded" style="width: 64px; cursor: pointer;">
-                        </span>
+                        <span *ngIf="col.field === 'id'" (click)="selectItem(rowData)">
+                        <img *ngIf="rowData['foto']" src="http://localhost:8080/api/uploads/img/{{rowData['foto']}}"
+                          class="img-thumbnail rounded" style="width: 64px; cursor: pointer;">
+                        <img *ngIf="!rowData['foto']" src="http://localhost:8080/images/no-usuario.png"
+                          class="img-thumbnail rounded" style="width: 64px; cursor: pointer;">
+                      </span>
                         <span *ngIf="col.field != 'id'">
-                          {{rowData[col.field] }}
-                        </span>
+                        {{rowData[col.field] }}
+                      </span>
                     </td>
-                    <td>
-                        <span class="btn btn-xs text-center" style="margin:0px 15px;" (click)="selectItem(rowData)">
-              <i class="fas fa-user-edit" style="color:green"></i>
-            </span>
-                        <span (click)="delete(rowData)">
-              <i class="fas fa-user-times" style="color:red"></i>
-            </span>
+                    <td *ngIf="auth.hasRoles('ROLE_ADMIN')">
+                        <span class="btn btn-xs text-center" style="margin:0px 15px;" (click)="selectItem(rowData)" *ngIf="auth.hasRoles('ROLE_ADMIN')">
+                        <i class="fas fa-user-edit" style="color:green"></i>
+                      </span>
+                        <span (click)="delete(rowData)" *ngIf="auth.hasRoles('ROLE_ADMIN')">
+                        <i class="fas fa-user-times" style="color:red"></i>
+                      </span>
                     </td>
                 </tr>
             </ng-template>

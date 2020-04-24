@@ -11,6 +11,9 @@ public interface IClienteDao extends JpaRepository<Cliente, Long>{
 	@Procedure("GET_TOTAL_CLIENTES")
     long procedureName(String inputParam1);
 	
+	@Procedure("getIdCliente")
+    String getIdCliente(Long id);
+	
 	@Query(nativeQuery = true, value = "select CalcIncome(:starting_value)")
     long functionName(@Param("starting_value") Long inputParam1);
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alejo.springboot.backend.apirest.model.entity.Cliente;
 import com.alejo.springboot.backend.apirest.models.dao.IClienteDao;
+import com.google.gson.Gson;
 
 @Service
 public class ClienteServiceImpl implements IClienteService {
@@ -58,13 +59,28 @@ public class ClienteServiceImpl implements IClienteService {
 	@Override
 	@Transactional
 	public long functionName(Long param1) {
-		long outParam = clienteDao.functionName(param1);
-		return outParam;
+		return clienteDao.functionName(param1);
 	}
 	@Override
+	@Transactional
 	public Page<Cliente> findAll(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return clienteDao.findAll(pageable);
+	}
+	@Override
+	@Transactional
+	public Cliente getIdCliente(Long id) {
+		// TODO Auto-generated method stub
+		String data = clienteDao.getIdCliente(id);
+		Cliente c = null;
+		try {
+			Gson gson = new Gson();
+			c = gson.fromJson(data, Cliente.class);
+		} catch (Exception e) {
+			System.err.println(e.getMessage().toString().concat(" : ").concat(e.getCause().toString()));
+			// TODO: handle exception
+		}
+		return c;
 	}
 
 

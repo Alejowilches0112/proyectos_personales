@@ -1,6 +1,6 @@
 package com.alejo.springboot.backend.apirest.controllers;
 
-import java.io.IOException; 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,9 +23,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
-//import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,7 +50,8 @@ public class ClienteRestController {
 
 	@Autowired
 	private IRegionService regionService;
-
+	
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@GetMapping("/clientes")
 	public ResponseEntity<?> findAll() {
 		List<Cliente> data = null;
@@ -66,7 +66,7 @@ public class ClienteRestController {
 		response.put("clientes", data);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@GetMapping("/clientes/page/{page}/{size}")
 	public ResponseEntity<?> findAll(@PathVariable Integer page, @PathVariable Integer size) {
 		Page<Cliente> data = null;
@@ -82,13 +82,13 @@ public class ClienteRestController {
 		return new ResponseEntity<Page<Cliente>>(data, HttpStatus.OK);
 	}
 
-	// @Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/clientes/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		Cliente cliente = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			cliente = clienteService.findById(id);
+			cliente = clienteService.getIdCliente(id);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -98,7 +98,7 @@ public class ClienteRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
-	// @Secured("ROLE_ADMIN")
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/clientes")
 	public ResponseEntity<?> save(@Valid @RequestBody Cliente cliente, BindingResult result) {
 		Cliente data = null;
@@ -122,7 +122,7 @@ public class ClienteRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 
-	// @Secured("ROLE_ADMIN")
+	@Secured("ROLE_ADMIN")
 	@PutMapping("/clientes/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente, BindingResult result, @PathVariable Long id) {
 		Map<String, Object> response = new HashMap<>();
@@ -151,7 +151,7 @@ public class ClienteRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 
-	// @Secured("ROLE_ADMIN")
+	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/clientes/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		Map<String, Object> response = new HashMap<>();
@@ -178,7 +178,7 @@ public class ClienteRestController {
 		response.put("mensaje", "Cliente Eliminado");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/clientes/upload")
 	public ResponseEntity<?> uploadFile(@RequestParam("id") Long id, @RequestParam("file") MultipartFile archivo) {
 		Map<String, Object> response = new HashMap<>();
@@ -236,19 +236,23 @@ public class ClienteRestController {
 	}
 
 	@PostMapping("/clientes/prueba")
-	public String prueba(@RequestParam("parametro") String p1, @RequestParam("p2") Long p2) {
-		System.err.println(p1 + " " + p2);
-		String prueba = "";
+	public ResponseEntity<Map<String, Object>> prueba(@RequestParam("id") Long p1) {
+		Map<String, Object> response = new HashMap<>();
+		System.err.println(p1 + " ");
+		Cliente data = null;
 		try {
-			System.err.println(clienteService.procedureName(p1));
-			System.err.println(clienteService.functionName(p2));
+			data = clienteService.getIdCliente(p1);
+			//System.err.println(clienteService.functionName(p2));
 		} catch (DataAccessException e) {
-			prueba = e.getMessage() + ": " + e.getCause().getMessage();
+			response.put("mensaje", "Error al actualizar el Cliente");
+			response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			// TODO: handle exception
 		}
-		return prueba;
+		response.put("cliente", data);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@GetMapping("/clientes/regiones")
 	public ResponseEntity<?> findAllRegiones() {
 		List<Region> data = null;

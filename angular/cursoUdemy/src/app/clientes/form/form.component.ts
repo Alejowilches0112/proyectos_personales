@@ -3,6 +3,7 @@ import { Clientes } from '../../entities/clientes';
 import { ApiService } from '../../servicios/api.service';
 import { AppServiceService } from '../../servicios/authService';
 import { HttpEventType } from '@angular/common/http';
+import { Router } from '@angular/router';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import {Subject, Observable} from 'rxjs';
@@ -25,10 +26,10 @@ export class FormComponent implements OnInit {
   public titulo;
   es: any;
 
-  constructor(private api: ApiService, private auth: AppServiceService) { }
+  constructor(private api: ApiService, private auth: AppServiceService, private route: Router) { }
 
   ngOnInit() {
-    this.titulo = (this.idCliente) ? 'EDITAR CLIENTE' : 'NUEVO CLIENTE';
+    this.titulo = (this.idCliente) ? ( (this.auth.hasRoles('ROLE_ADMIN')) ? 'EDITAR CLIENTE' : 'DETALLE DEL CLIENTE') : 'NUEVO CLIENTE';
     this.loadId(this.idCliente);
     this.listRegiones();
     this.es = {
@@ -49,10 +50,11 @@ export class FormComponent implements OnInit {
       if (d.type === HttpEventType.Response) {
         const response: any = d.body;
         this.regiones = [{label: '', value: null}];
-        for(let i of response.regiones) {
+        for (let i of response.regiones) {
           this.regiones = [...this.regiones, {label: i.nombre, value: i}];
         }
       }
+    }, err => {
     });
   }
 
@@ -61,7 +63,6 @@ export class FormComponent implements OnInit {
       this.api.getId(this.urlEnPoint, id, 'application/json', this.auth.token).toPromise().then(d => {
         if (d.type === HttpEventType.Response) {
           const response: any = d.body;
-          console.log(response);
           this.cliente = response.cliente;
           this.edit = true;
         }
@@ -93,7 +94,6 @@ export class FormComponent implements OnInit {
         }
       }
     }, error => {
-      console.log(error)
       swal({
         title: error.error.mensaje,
         text: error.error.error,
@@ -115,8 +115,8 @@ export class FormComponent implements OnInit {
       }
     }, error => {
       swal({
-        title: error.mensaje,
-        text: error.error,
+        title: error.error.mensaje,
+        text: error.error.error,
         type: 'error'
       });
     });

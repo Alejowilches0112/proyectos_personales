@@ -59,7 +59,7 @@ export class AppServiceService {
     sessionStorage.setItem('token_angularApp', this._token);
   }
 
-  private obtenerDatosToken(accessToken) {
+  public obtenerDatosToken(accessToken) {
     if (accessToken) {
       return JSON.parse(atob(accessToken.split('.')[1]));
     }
@@ -73,6 +73,12 @@ export class AppServiceService {
     return false;
   }
 
+  public hasRoles(role) {
+    if (this.usuario.roles.includes(role)) {
+      return true;
+    }
+    return false;
+  }
   public logout() {
     this._token = null;
     this._usuario = null;
